@@ -28,8 +28,8 @@ const produit = "http://localhost:3000/api/products/" + id; // creation d'une co
                                                             // - un string => qui contient l'adresse url du site de l'accueil
                                                             //- une concatenation et la variable ID qui vas cibler l'id des differentes images
 
-fetch (produit) //Promesse, avec entre parenthese la variable contenant url de base + id selon l'objet choisi
-    .then(res => res.json()) // retour d'une reponse en format Json dans le " then ", quand tout vas bien
+fetch (produit)                     //Promesse, avec entre parenthese la variable contenant url de base + id selon l'objet choisi
+    .then(res => res.json())        // retour d'une reponse en format Json dans le " then ", quand tout vas bien
     .then (function(data){ 
         produitKanape(data);
         console.log(data);
@@ -56,35 +56,42 @@ function produitKanape(kanape){
         console.log(couleurs)
     }
 };
-
-boutonPanier.addEventListener('click', () => {
+//Ecouteur d'évènement, qui s'active au clic que le bouton pour ajouter au panier
+boutonPanier.addEventListener('click', afficherProduit)
     console.log(boutonPanier, 'Commande validée');
 
-    let Kanape = {"id" : id,
-    "quantiteProduit" : quantiteProduit.value,  
-    "couleurProduit" : couleurProduit.value,}
 
-    const localKanap = JSON.parse(localStorage.getItem("panier"));
-    
-    if((Kanape.couleurProduit === "") || (Kanape.quantiteProduit <= 0 || Kanape.quantiteProduit > 100)){
-        console.log("est ce que ca fonctionne ?");
-    }else{
-        
-        if(localKanap){
-            console.log("oui");
-            for(let addPanier = 0 ;  addPanier < localKanap.length ; addPanier++){
-                console.log('panier non trouvé')
-                if(localKanap[addPanier].id === Kanape.id && localKanap[addPanier].couleurProduit === Kanape.couleurProduit){
-                    // localKanap[addPanier].quantiteProduit += Kanape.quantiteProduit;
-                    // localStorage.setItem("panier",JSON.stringify(localKanap));
-                    console.log("Produit trouvé");
+function afficherProduit(){
+    let couleurSelect = couleurProduit.value;
+    let quantiteSelect = parseInt(quantiteProduit.value);
+    // SI la couleur sélectionner est = a rien ou que le produit est < ou = a 0 OU que la quantité est a plus de 100 afficher le message d'alert
+    if((couleurSelect === '') || (quantiteSelect <= 0 || quantiteSelect > 100)){
+        alert("Choix d'une couleur ou d'une quantitée");
+        return;                     // Met fin à la condition, comme un " Break "
+    }
 
-                }
+    let panierClient = localStorage.getItem("panier");
+    let tableau = [];
+    if(panierClient){
+        tableau = JSON.parse(panierClient);
+    }
+    for(let compteur of tableau){
+        if(compteur.id === id && compteur.couleur === couleurSelect){
+            compteur.quantite += quantiteSelect;
+            if(compteur.quantite > 100){
+                alert("Vous ne pouvez pas choisir plus de 100 articles");
+                return;
             }
-        }else{
-            localStorage.setItem("panier" , JSON.stringify(Kanape));
+            localStorage.setItem("panier", JSON.stringify(tableau));
+            return true;
         }
     }
-});
 
+    tableau.push({id : id, Couleur : couleurSelect, Quantite : quantiteSelect });
+    localStorage.setItem("panier", JSON.stringify(tableau));
 
+}
+
+boutonPanier.addEventListener('click', event => {
+    boutonPanier.innerHTML = " Produit ajouté au panier !";
+    });
