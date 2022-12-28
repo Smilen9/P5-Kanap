@@ -34,8 +34,8 @@ const produit = "http://localhost:3000/api/products/" + id; // creation d'une co
                                                             // - un string => qui contient l'adresse url du site de l'accueil
                                                             //- une concatenation et la variable ID qui vas cibler l'id des differentes images
 
-fetch (produit)                     //Promesse, avec entre parenthese la variable contenant url de base + id selon l'objet choisi
-    .then(res => res.json())        // retour d'une reponse en format Json dans le " then ", quand tout vas bien
+fetch (produit)                                             //Promesse, avec entre parenthese la variable contenant url de base + id selon l'objet choisi
+    .then(res => res.json())                                // retour d'une reponse en format Json dans le " then ", quand tout vas bien
     .then (function(data){ 
         produitKanape(data);
         console.log(data);
@@ -45,50 +45,60 @@ fetch (produit)                     //Promesse, avec entre parenthese la variabl
         console.log(err);
     });
 
-function produitKanape(kanape){
+    //Function qui permet d'afficher dans le HTML les différentes information de l'image
+function produitKanape(kanape){//pourquoi passer un parametre?
     let baliseImage = document.createElement("img");
     baliseImage.src = kanape.imageUrl;
     baliseImage.alt = kanape.altTxt;
     imageKanape.appendChild(baliseImage);
-
+//La variable "nomProduit" contient l'id "title", on y met le parametre "kanape" avec le ciblage "." vers le name
     nomProduit.textContent = kanape.name;
+//Idem que pour le nom du produit mais avec le prix
     prixProduit.textContent = kanape.price;
+//Idem avec la description
     descriptionProduit.textContent = kanape.description;
-    
+
+// on fait une boucle for pour parcourir les couleurs qui sont dans un tableau
     for (let couleurs of kanape.colors){
         let optionValue = document.createElement("option");
         optionValue.textContent = couleurs;
+// dans le html les options sont les enfants de la balise select avec l'id colors(variable couleurProduit)
         couleurProduit.appendChild(optionValue);
         console.log(couleurs)
     }
 };
-//Ecouteur d'évènement, qui s'active au clic que le bouton pour ajouter au panier
+//Ecouteur d'évènement, qui permet d'activé la fonction "afficherProduit", au clic sur le bouton
 boutonPanier.addEventListener('click', afficherProduit)
     console.log(boutonPanier, 'Commande validée');
 
 
 function afficherProduit(){
+//couleurSelect est une variable qui contient les valeurs
     let couleurSelect = couleurProduit.value;
     let quantiteSelect = parseInt(quantiteProduit.value);
-    // SI la couleur sélectionner est = a rien ou que le produit est < ou = a 0 OU que la quantité est a plus de 100 afficher le message d'alert
+// SI la couleur sélectionner est strictement = à rien ou que le produit est < ou = a 0 OU que la quantité est a plus de 100 afficher le message d'alert
     if((couleurSelect === '') || (quantiteSelect <= 0 || quantiteSelect > 100)){
         alert("Choix d'une couleur ou d'une quantitée");
-        return;                     // Met fin à la condition, comme un " Break "
+        return;                    // Met fin à la condition, comme un " Break "
     }
-
+// Creation d'une variable pour y mettre le localStorage (le panier)
     let panierClient = localStorage.getItem("panier");
+// On créer un tableau vide dans lequel on y met la variable contenant le panir en parsé, 
     let tableau = [];
     if(panierClient){
-        tableau = JSON.parse(panierClient);
+        tableau = JSON.parse(panierClient); // On parse le localStorage dans la variable pour transformer la chaine de caractere en objet
     }
+// "compteur" est la variable qui correspond au élément itérable du chapeau
     for(let compteur of tableau){
+    //Si deux éléments on le meme id ou la meme couleur alors ajouter (+=) la quantité au produit
         if(compteur.id === id && compteur.Couleur === couleurSelect){
             compteur.Quantite += quantiteSelect;
+    // Il faut que la quantité ne soit pas supérieur a 100.
             if(compteur.Quantite > 100){
                 alert("Vous ne pouvez pas choisir plus de 100 articles");
                 return;
             }
-            localStorage.setItem("panier", JSON.stringify(tableau));
+            localStorage.setItem("panier", JSON.stringify(tableau)); // Stringify pour retransformer l'objet en chaine de caractere
             return true;
         }
     }
