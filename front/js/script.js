@@ -29,4 +29,3 @@ fetch ("http://localhost:3000/api/products") //Lien de l'API, envoie une requete
         console.log(err);
         console.log("une erreur est survenue")
     })
-  

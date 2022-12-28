@@ -1,3 +1,9 @@
+//Ici on veut que le client choisisse obligatoirement une quantité de 1 minimum et 100 maximum
+//le client doit aussi choisir obligatoirement une couleur.
+//il doit pouvoir passer ca commence, ca doit ce retrouver dans le localStorage.
+//Les couleurs et les quantitées doivent s'accumuler si le produit est le meme.
+
+
 //associer la page aux données de l'api
 let url = new URL(window.location.href);        //La propriété window.location.href retourne l'URL complète de la page en cours.
 let id = url.searchParams.get("id");            //L'instruction récupère la valeur du paramètre id dans l'objet URL créé précédemment.
@@ -76,9 +82,9 @@ function afficherProduit(){
         tableau = JSON.parse(panierClient);
     }
     for(let compteur of tableau){
-        if(compteur.id === id && compteur.couleur === couleurSelect){
-            compteur.quantite += quantiteSelect;
-            if(compteur.quantite > 100){
+        if(compteur.id === id && compteur.Couleur === couleurSelect){
+            compteur.Quantite += quantiteSelect;
+            if(compteur.Quantite > 100){
                 alert("Vous ne pouvez pas choisir plus de 100 articles");
                 return;
             }
