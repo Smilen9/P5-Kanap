@@ -3,12 +3,12 @@
 //il doit pouvoir passer ca commence, ca doit ce retrouver dans le localStorage.
 //Les couleurs et les quantitées doivent s'accumuler si le produit est le meme.
 
-
 //associer la page aux données de l'api
 let url = new URL(window.location.href);        //La propriété window.location.href retourne l'URL complète de la page en cours.
 let id = url.searchParams.get("id");            //L'instruction récupère la valeur du paramètre id dans l'objet URL créé précédemment.
 console.log(id);
 
+//Déclaration des variable qui cible nos éléments HTML
 //Variable qui cible l'emplacement de la class item__img pour insérer l'image
 let imageKanape = document.querySelector(".item__img");
 
@@ -34,6 +34,8 @@ const produit = "http://localhost:3000/api/products/" + id; // creation d'une co
                                                             // - un string => qui contient l'adresse url du site de l'accueil
                                                             //- une concatenation et la variable ID qui vas cibler l'id des differentes images
 
+
+
 fetch (produit)                                             //Promesse, avec entre parenthese la variable contenant url de base + id selon l'objet choisi
     .then(res => res.json())                                // retour d'une reponse en format Json dans le " then ", quand tout vas bien
     .then (function(data){ 
@@ -45,8 +47,10 @@ fetch (produit)                                             //Promesse, avec ent
         console.log(err);
     });
 
+
+
     //Function qui permet d'afficher dans le HTML les différentes information de l'image
-function produitKanape(kanape){//pourquoi passer un parametre?
+function produitKanape(kanape){ // Comment il sais ce que "KANAPE" représente ?
     let baliseImage = document.createElement("img");
     baliseImage.src = kanape.imageUrl;
     baliseImage.alt = kanape.altTxt;
@@ -67,6 +71,9 @@ function produitKanape(kanape){//pourquoi passer un parametre?
         console.log(couleurs)
     }
 };
+
+
+
 //Ecouteur d'évènement, qui permet d'activé la fonction "afficherProduit", au clic sur le bouton
 boutonPanier.addEventListener('click', afficherProduit)
     console.log(boutonPanier, 'Commande validée');
@@ -76,6 +83,7 @@ function afficherProduit(){
 //couleurSelect est une variable qui contient les valeurs
     let couleurSelect = couleurProduit.value;
     let quantiteSelect = parseInt(quantiteProduit.value);
+    
 // SI la couleur sélectionner est strictement = à rien ou que le produit est < ou = a 0 OU que la quantité est a plus de 100 afficher le message d'alert
     if((couleurSelect === '') || (quantiteSelect <= 0 || quantiteSelect > 100)){
         alert("Choix d'une couleur ou d'une quantitée");
@@ -102,12 +110,10 @@ function afficherProduit(){
             return true;
         }
     }
-
-    tableau.push({id : id, Couleur : couleurSelect, Quantite : quantiteSelect });
+    tableau.push({id : id, Couleur : couleurSelect, Quantite : quantiteSelect});
     localStorage.setItem("panier", JSON.stringify(tableau));
-
 }
 
-boutonPanier.addEventListener('click', event => {
+boutonPanier.addEventListener('click', () => {
     boutonPanier.innerHTML = " Produit ajouté au panier !";
     });
