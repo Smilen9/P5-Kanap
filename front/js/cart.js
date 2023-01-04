@@ -88,22 +88,37 @@ let addQuantite = document.querySelectorAll('.itemQuantity'); // Cible l'éléme
 }
 
 
-// comment vérifier valeur regex formulaire en javaScript
-// définir regex
-// test de valeur en formulaire javaScript avec le regex
-// voir envoyer donnée methode POST formulaire javaScrit
-
-let commander = document.getElementById('order')
-
-commander.addEventListener('click',()=>{
+// Création du regexp 
+//on place la valeur des inputs du formulaire dans des variables
   let prenom = document.getElementById('firstName').value;
   let nom = document.getElementById('lastName').value;
   let adresse = document.getElementById('address').value;
   let ville = document.getElementById('city').value;
   let mail = document.getElementById('email').value;
 
-   if(prenom != regex){
+  // Variable qui contient tout le formulaire 
+  let form = document.querySelector('.cart__order__form');
 
-   }
-})
+  console.log(form.firstName);
+  // Ecouter la modification de l'email
+  form.firstName.addEventListener("change", function(){
+    validName(this)
+  });
+
+  function validName(inputName){
+    let nameRegExp =  new RegExp('^[a-zA-Z]+$') 
+    nameRegExp.test(Nicolas);                   //^ début de la chaine de caractere
+  }                                             // ce qui se trouve entre crochet signifie qu'on peut utilisé les lettres en minuscule et majuscule de A a Z 
+                                                // + signifie que les lettres peuvent etre utilisé plusieurs fois
+                                                //$ fin de la chaine
+
+                                               
+  //Bouton pour envoyer le formulaire
+  let commander = document.getElementById('order')
+
+  //regex nom prenom, contient minuscule et majuscule uniquement
+  //regex adresse contient minuscule majuscule chiffre 1 a 9
+  //ville contient majuscule et minuscule uniquement
+  //regex mail contient minuscule majuscule chiffre et 1 . et 1 @
+
 
