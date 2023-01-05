@@ -84,41 +84,127 @@ let addQuantite = document.querySelectorAll('.itemQuantity'); // Cible l'éléme
       localStorage.setItem("panier", JSON.stringify(tableau));
       window.location.reload();
   })
-  }                                               //On veut que quand on ajoute une quantité a un produit deja existant dans le panie                                               // La quantité s'ajoute et le prix se multiplie
+  }                                        //On veut que quand on ajoute une quantité a un produit deja existant dans le panie                                               // La quantité s'ajoute et le prix se multiplie
 }
 
 
-// Création du regexp 
-//on place la valeur des inputs du formulaire dans des variables
-  let prenom = document.getElementById('firstName').value;
-  let nom = document.getElementById('lastName').value;
-  let adresse = document.getElementById('address').value;
-  let ville = document.getElementById('city').value;
-  let mail = document.getElementById('email').value;
+// **************** *****************************REGEX **********************************************************
 
-  // Variable qui contient tout le formulaire 
+// Variable qui contient tout le formulaire et qui nous permet de ciblé les input grace à leurs name
   let form = document.querySelector('.cart__order__form');
 
-  console.log(form.firstName);
-  // Ecouter la modification de l'email
+
+// *********** CREATION D'EVENEMENT D'ECOUTE AVEC DES FONCTION CALLBACK*************
+  // Ecouter la modification du prenom au "changement" quand l'input n'as plus le focus
   form.firstName.addEventListener("change", function(){
-    validName(this)
+    validName(this)          // le (this) en parametre cible dans l'HTML l'input avec le name "firstName"
   });
 
-  function validName(inputName){
-    let nameRegExp =  new RegExp('^[a-zA-Z]+$') 
-    nameRegExp.test(Nicolas);                   //^ début de la chaine de caractere
-  }                                             // ce qui se trouve entre crochet signifie qu'on peut utilisé les lettres en minuscule et majuscule de A a Z 
-                                                // + signifie que les lettres peuvent etre utilisé plusieurs fois
-                                                //$ fin de la chaine
+  // Ecouter la modification sur l'input du nom
+  form.lastName.addEventListener("change", function(){
+    validSecondName(this)                           
+  });
 
-                                               
+  // Ecouter la modification sur l'input de l'adresse
+  form.address.addEventListener("change", function(){
+    validAddress(this)                          
+  });
+
+  // Ecouter la modification sur l'input de la ville
+  form.city.addEventListener("change", function(){
+    validCity(this)                           
+  });
+
+  // Ecouter la modification sur l'input de l'email
+  form.email.addEventListener("change", function(){
+    validEmail(this)                          
+  });
+  // *********************** FIN DES ECOUTES**************************************************
+
+// ********************* VALIDATION PRENOM *********************
+  function validName(inputName){  //"inputName" correspond au "this" dans l'événement d'écoute, qui lui meme correspond a l'input  de l'HTML
+    // creation de l'expression réguliere pour validation nom et prenom
+    let regExp =  new RegExp('^[a-zA-Z-]+$', 'g');
+    
+    // On test l'expression réguliere pour le prenom
+    let prenom = regExp.test(inputName.value);
+    // récupération de la balise <p> apres l'input pour afficher le message
+    let p = inputName.nextElementSibling;
+//SI prenom est true, prenom validé, SINON, prenom incorrect
+    if(prenom){
+      p.innerHTML = 'prenom valide'
+    }else{
+      p.innerHTML = 'prenom incorrect'
+    }
+    console.log(prenom);
+  }
+
+
+  // ********************* VALIDATION NOM *********************
+  function validSecondName(inputLastName){
+    // creation de l'expression réguliere pour validation nom et prenom
+    let regExp =  new RegExp('^[a-zA-Z]+$', 'g');
+    
+    let nom = regExp.test(inputLastName.value);
+    // récupération de la balise <p> apres l'input pour afficher le message
+    let p = inputLastName.nextElementSibling;
+    if(nom){
+      p.innerHTML = 'nom valide'
+    }else{
+      p.innerHTML = 'nom incorrect'
+    }
+    console.log(nom);
+  }
+  
+  // ********************* VALIDATION ADRESSE *********************
+  function validAddress(inputAdress){
+    // creation de l'expression réguliere pour validation nom et prenom
+    let regExp =  new RegExp(/^[A-Za-z0-9 \-]*$/g);
+    
+    let adresse = regExp.test(inputAdress.value);
+    // récupération de la balise <p> apres l'input pour afficher le message
+    let p = inputAdress.nextElementSibling;
+    if(adresse){
+      p.innerHTML = 'adresse valide'
+    }else{
+      p.innerHTML = 'adresse incorrect'
+    }
+    console.log(adresse);
+  }  
+  
+  // ********************* VALIDATION VILLE *********************
+  function validCity(inputCity){
+    // creation de l'expression réguliere pour validation nom et prenom
+    let regExp =  new RegExp(/^[A-Za-z \-]*$/g); //Le regex gere les majuscules, minuscules tirets et espaces blanc
+    
+    let ville = regExp.test(inputCity.value);
+    // récupération de la balise <p> apres l'input pour afficher le message
+    let p = inputCity.nextElementSibling;
+    if(ville){
+      p.innerHTML = 'ville valide'
+    }else{
+      p.innerHTML = 'ville incorrect'
+    }
+    console.log(ville);
+  }
+
+  // ********************* VALIDATION EMAIL *********************
+  function validEmail(inputEmail){
+    // creation de l'expression réguliere pour validation nom et prenom
+    let regExp =  new RegExp(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g);
+    
+    let email = regExp.test(inputEmail.value);
+    // récupération de la balise <p> apres l'input pour afficher le message
+    let p = inputEmail.nextElementSibling;
+
+    if(email){ 
+      p.innerHTML = 'email valide'
+    }else{
+      p.innerHTML = 'email incorrect'
+    }
+    console.log(email);
+  }
+
   //Bouton pour envoyer le formulaire
-  let commander = document.getElementById('order')
-
-  //regex nom prenom, contient minuscule et majuscule uniquement
-  //regex adresse contient minuscule majuscule chiffre 1 a 9
-  //ville contient majuscule et minuscule uniquement
-  //regex mail contient minuscule majuscule chiffre et 1 . et 1 @
-
+  let commander = document.getElementById('order');
 
