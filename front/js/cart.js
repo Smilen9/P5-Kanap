@@ -124,7 +124,7 @@ let addQuantite = document.querySelectorAll('.itemQuantity'); // Cible l'éléme
 // ********************* VALIDATION PRENOM *********************
   function validName(inputName){  //"inputName" correspond au "this" dans l'événement d'écoute, qui lui meme correspond a l'input  de l'HTML
     // creation de l'expression réguliere pour validation nom et prenom
-    let regExp =  new RegExp('^[a-zA-Z-]+$', 'g');
+    let regExp =  new RegExp(/^[a-zA-Z-]+$/g);
     
     // On test l'expression réguliere pour le prenom
     let prenom = regExp.test(inputName.value);
@@ -143,8 +143,8 @@ let addQuantite = document.querySelectorAll('.itemQuantity'); // Cible l'éléme
   // ********************* VALIDATION NOM *********************
   function validSecondName(inputLastName){
     // creation de l'expression réguliere pour validation nom et prenom
-    let regExp =  new RegExp('^[a-zA-Z]+$', 'g');
-    
+    let regExp =  new RegExp(/^[a-zA-Z]+$/g);
+     
     let nom = regExp.test(inputLastName.value);
     // récupération de la balise <p> apres l'input pour afficher le message
     let p = inputLastName.nextElementSibling;
@@ -205,6 +205,13 @@ let addQuantite = document.querySelectorAll('.itemQuantity'); // Cible l'éléme
     console.log(email);
   }
 
-  //Bouton pour envoyer le formulaire
-  let commander = document.getElementById('order');
+// ***************** ENVOIE DU FORMULAIRE *****************
 
+form.addEventListener('submit', function(e){
+  if (form === "false"){  //Si dans le formulaire il y a un " false " alors, 
+    e.preventDefault(); //On stop l'envoie du formulaire
+  } else{             // Sinon on envoie  le formulaire.
+    form.submit();
+    console.log("formulaire envoyé")
+  }
+})
