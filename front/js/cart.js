@@ -91,10 +91,7 @@ let addQuantite = document.querySelectorAll('.itemQuantity'); // Cible l'éléme
 // **************** *****************************REGEX **********************************************************
 
 // Variable qui contient tout le formulaire et qui nous permet de ciblé les input grace à leurs name
-  let form = document.querySelector('.cart__order__form');
-
-
-// *********** CREATION D'EVENEMENT D'ECOUTE AVEC DES FONCTION CALLBACK*************
+const form = document.querySelector('.cart__order__form');
 
 const firstName = document.getElementById('firstName');
 const lastName = document.getElementById('lastName');
@@ -102,121 +99,52 @@ const adresse = document.getElementById('address');
 const ville = document.getElementById('city');
 const email = document.getElementById('email');
 
-  // Ecouter la modification du prenom au "changement" quand l'input n'as plus le focus
-  // firstName.addEventListener("change", function(){
-  //   validName(this)          // le (this) en parametre cible dans l'HTML l'input avec le name "firstName"
-  // });
-
-  // // Ecouter la modification sur l'input du nom
-  // lastName.addEventListener("change", function(){
-  //   validSecondName(this)                           
-  // });
-
-  // // Ecouter la modification sur l'input de l'adresse
-  // adresse.addEventListener("change", function(){
-  //   validAddress(this)                          
-  // });
-
-  // // Ecouter la modification sur l'input de la ville
-  // ville.addEventListener("change", function(){
-  //   validCity(this)                           
-  // });
-
-  // // Ecouter la modification sur l'input de l'email
-  // email.addEventListener("change", function(){
-  //   validEmail(this)                          
-  // });
-  // *********************** FIN DES ECOUTES**************************************************
-
 // ********************* VALIDATION PRENOM *********************
 
-  function validName(name){  //"inputName" correspond au "this" dans l'événement d'écoute, qui lui meme correspond a l'input  de l'HTML
+  function validName(firstName){  //"inputName" correspond au "this" dans l'événement d'écoute, qui lui meme correspond a l'input  de l'HTML
     // creation de l'expression réguliere pour validation nom et prenom
     let regExp =  new RegExp(/^[a-zA-Z-]+$/g);
-    
     // On test l'expression réguliere pour le prenom
-    let prenom = regExp.test(name.value);
-    // récupération de la balise <p> apres l'input pour afficher le message
-    let p = name.nextElementSibling;
-//SI prenom est true, prenom validé, SINON, prenom incorrect
-    if(prenom){
-      p.innerHTML = 'prenom valide'
-      return true
-    }else{
-      p.innerHTML = 'prenom incorrect'
-      return false
-    }
+    let prenom = regExp.test(firstName.value);
+    console.log(prenom);
   }
 
-
   // ********************* VALIDATION NOM *********************
-  function validSecondName(inputLastName){
+  function validSecondName(lastName){
     // creation de l'expression réguliere pour validation nom et prenom
-    let regExp =  new RegExp(/^[a-zA-Z]+$/g);
-     
-    let nom = regExp.test(inputLastName.value);
-    // récupération de la balise <p> apres l'input pour afficher le message
-    let p = inputLastName.nextElementSibling;
-    if(nom){
-      p.innerHTML = 'nom valide'
-    }else{
-      p.innerHTML = 'nom incorrect'
-    }
+    let regExp =  new RegExp(/^[a-zA-Z]+$/g);   
+    let nom = regExp.test(lastName.value);
     console.log(nom);
   }
   
   // ********************* VALIDATION ADRESSE *********************
-  function validAddress(inputAdress){
+  function validAddress(adresse){
     // creation de l'expression réguliere pour validation nom et prenom
     let regExp =  new RegExp(/^[A-Za-z0-9 \-]*$/g);
-    
-    let adresse = regExp.test(inputAdress.value);
-    // récupération de la balise <p> apres l'input pour afficher le message
-    let p = inputAdress.nextElementSibling;
-    if(adresse){
-      p.innerHTML = 'adresse valide'
-    }else{
-      p.innerHTML = 'adresse incorrect'
-    }
-    console.log(adresse);
+    let localisation = regExp.test(adresse.value);
+    console.log(localisation);
   }  
   
   // ********************* VALIDATION VILLE *********************
-  function validCity(inputCity){
+  function validCity(ville){
     // creation de l'expression réguliere pour validation nom et prenom
     let regExp =  new RegExp(/^[A-Za-z \-]*$/g); //Le regex gere les majuscules, minuscules tirets et espaces blanc
-    
-    let ville = regExp.test(inputCity.value);
-    // récupération de la balise <p> apres l'input pour afficher le message
-    let p = inputCity.nextElementSibling;
-    if(ville){
-      p.innerHTML = 'ville valide'
-    }else{
-      p.innerHTML = 'ville incorrect'
-    }
-    console.log(ville);
+    let city = regExp.test(ville.value);
+   
+    console.log(city);
   }
 
   // ********************* VALIDATION EMAIL *********************
-  function validEmail(inputEmail){
+  function validEmail(email){
     // creation de l'expression réguliere pour validation nom et prenom
     let regExp =  new RegExp(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g);
-    
-    let email = regExp.test(inputEmail.value);
-    // récupération de la balise <p> apres l'input pour afficher le message
-    let p = inputEmail.nextElementSibling;
-
-    if(email){ 
-      p.innerHTML = 'email valide'
-    }else{
-      p.innerHTML = 'email incorrect'
-    }
-    console.log(email);
+    let mail = regExp.test(email.value);
+    console.log(mail);
   }
 
 // ***************** ENVOIE DU FORMULAIRE *****************
 
-document.querySelector(".cart__order__form").addEventListener('click', function(e){
+  form.addEventListener('click', function(){
    const validFirstName = validName(firstName);
    if(validFirstName === false){
     document.getElementById('firstNameErrorMsg').innerHTML= "prenom invalide";
@@ -235,7 +163,6 @@ document.querySelector(".cart__order__form").addEventListener('click', function(
    }else{
     document.getElementById('addressErrorMsg').innerHTML= "";
    }
-
    const vile = validCity(ville);
    if(vile === false){
     document.getElementById('cityErrorMsg').innerHTML= "ville invalide";
@@ -254,35 +181,6 @@ document.querySelector(".cart__order__form").addEventListener('click', function(
     return;
    }
 
-
-//  if(validName === false|| validAddress === false || validCity === false || validSecondName === false || validEmail === false){
-//   return;
-//  }
-// else {
-  // firstName("change", function(){
-  //   validName(this)          // le (this) en parametre cible dans l'HTML l'input avec le name "firstName"
-  // });
-
-  // // Ecouter la modification sur l'input du nom
-  // lastName.addEventListener("change", function(){
-  //   validSecondName(this)                           
-  // });
-
-  // // Ecouter la modification sur l'input de l'adresse
-  // adresse.addEventListener("change", function(){
-  //   validAddress(this)                          
-  // });
-
-  // // Ecouter la modification sur l'input de la ville
-  // ville.addEventListener("change", function(){
-  //   validCity(this)                           
-  // });
-
-  // // Ecouter la modification sur l'input de l'email
-  // email.addEventListener("change", function(){
-  //   validEmail(this)                          
-  // });
-
     let tableauForm = { 
       "prenom": firstName.value,
       "nom" : lastName.value,
@@ -293,7 +191,7 @@ document.querySelector(".cart__order__form").addEventListener('click', function(
   
     let tableauID = [];
   
-    for ( i of tableau){
+    for (i of tableau){
       tableauID.push(i.id);
     }
   
