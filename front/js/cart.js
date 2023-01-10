@@ -95,48 +95,57 @@ let addQuantite = document.querySelectorAll('.itemQuantity'); // Cible l'éléme
 
 
 // *********** CREATION D'EVENEMENT D'ECOUTE AVEC DES FONCTION CALLBACK*************
+
+const firstName = document.getElementById('firstName');
+const lastName = document.getElementById('lastName');
+const adresse = document.getElementById('address');
+const ville = document.getElementById('city');
+const email = document.getElementById('email');
+
   // Ecouter la modification du prenom au "changement" quand l'input n'as plus le focus
-  form.firstName.addEventListener("change", function(){
-    validName(this)          // le (this) en parametre cible dans l'HTML l'input avec le name "firstName"
-  });
+  // firstName.addEventListener("change", function(){
+  //   validName(this)          // le (this) en parametre cible dans l'HTML l'input avec le name "firstName"
+  // });
 
-  // Ecouter la modification sur l'input du nom
-  form.lastName.addEventListener("change", function(){
-    validSecondName(this)                           
-  });
+  // // Ecouter la modification sur l'input du nom
+  // lastName.addEventListener("change", function(){
+  //   validSecondName(this)                           
+  // });
 
-  // Ecouter la modification sur l'input de l'adresse
-  form.address.addEventListener("change", function(){
-    validAddress(this)                          
-  });
+  // // Ecouter la modification sur l'input de l'adresse
+  // adresse.addEventListener("change", function(){
+  //   validAddress(this)                          
+  // });
 
-  // Ecouter la modification sur l'input de la ville
-  form.city.addEventListener("change", function(){
-    validCity(this)                           
-  });
+  // // Ecouter la modification sur l'input de la ville
+  // ville.addEventListener("change", function(){
+  //   validCity(this)                           
+  // });
 
-  // Ecouter la modification sur l'input de l'email
-  form.email.addEventListener("change", function(){
-    validEmail(this)                          
-  });
+  // // Ecouter la modification sur l'input de l'email
+  // email.addEventListener("change", function(){
+  //   validEmail(this)                          
+  // });
   // *********************** FIN DES ECOUTES**************************************************
 
 // ********************* VALIDATION PRENOM *********************
-  function validName(inputName){  //"inputName" correspond au "this" dans l'événement d'écoute, qui lui meme correspond a l'input  de l'HTML
+
+  function validName(name){  //"inputName" correspond au "this" dans l'événement d'écoute, qui lui meme correspond a l'input  de l'HTML
     // creation de l'expression réguliere pour validation nom et prenom
     let regExp =  new RegExp(/^[a-zA-Z-]+$/g);
     
     // On test l'expression réguliere pour le prenom
-    let prenom = regExp.test(inputName.value);
+    let prenom = regExp.test(name.value);
     // récupération de la balise <p> apres l'input pour afficher le message
-    let p = inputName.nextElementSibling;
+    let p = name.nextElementSibling;
 //SI prenom est true, prenom validé, SINON, prenom incorrect
     if(prenom){
       p.innerHTML = 'prenom valide'
+      return true
     }else{
       p.innerHTML = 'prenom incorrect'
+      return false
     }
-    console.log(prenom);
   }
 
 
@@ -207,11 +216,102 @@ let addQuantite = document.querySelectorAll('.itemQuantity'); // Cible l'éléme
 
 // ***************** ENVOIE DU FORMULAIRE *****************
 
-form.addEventListener('submit', function(e){
-  if (form === "false"){  //Si dans le formulaire il y a un " false " alors, 
-    e.preventDefault(); //On stop l'envoie du formulaire
-  } else{             // Sinon on envoie  le formulaire.
-    form.submit();
+document.querySelector(".cart__order__form").addEventListener('click', function(e){
+   const validFirstName = validName(firstName);
+   if(validFirstName === false){
+    document.getElementById('firstNameErrorMsg').innerHTML= "prenom invalide";
+   }else{
+    document.getElementById('firstNameErrorMsg').innerHTML= "";
+   }
+   const validNom = validName(lastName);
+   if(validNom === false){
+    document.getElementById('lastNameErrorMsg').innerHTML= "nom invalide";
+   }else{
+    document.getElementById('lastNameErrorMsg').innerHTML= "";
+   }
+   const validAdresse= validAddress(adresse);
+   if(validAdresse === false){
+    document.getElementById('addressErrorMsg').innerHTML= "adresse invalide";
+   }else{
+    document.getElementById('addressErrorMsg').innerHTML= "";
+   }
+
+   const vile = validCity(ville);
+   if(vile === false){
+    document.getElementById('cityErrorMsg').innerHTML= "ville invalide";
+   }else{
+    document.getElementById('cityErrorMsg').innerHTML= "";
+   }
+
+   const mail = validEmail(email);
+   if(mail === false){
+    document.getElementById('emailErrorMsg').innerHTML= "email invalide";
+   }else{
+    document.getElementById('emailErrorMsg').innerHTML= "";
+   }
+
+   if(validFirstName === false || validNom === false || validAdresse === false || adresse.value === '' || vile === false || mail === false){
+    return;
+   }
+
+
+//  if(validName === false|| validAddress === false || validCity === false || validSecondName === false || validEmail === false){
+//   return;
+//  }
+// else {
+  // firstName("change", function(){
+  //   validName(this)          // le (this) en parametre cible dans l'HTML l'input avec le name "firstName"
+  // });
+
+  // // Ecouter la modification sur l'input du nom
+  // lastName.addEventListener("change", function(){
+  //   validSecondName(this)                           
+  // });
+
+  // // Ecouter la modification sur l'input de l'adresse
+  // adresse.addEventListener("change", function(){
+  //   validAddress(this)                          
+  // });
+
+  // // Ecouter la modification sur l'input de la ville
+  // ville.addEventListener("change", function(){
+  //   validCity(this)                           
+  // });
+
+  // // Ecouter la modification sur l'input de l'email
+  // email.addEventListener("change", function(){
+  //   validEmail(this)                          
+  // });
+
+    let tableauForm = { 
+      "prenom": firstName.value,
+      "nom" : lastName.value,
+      "adresse": address.value,
+      "ville": city.value,
+      "mail": email.value,
+    };
+  
+    let tableauID = [];
+  
+    for ( i of tableau){
+      tableauID.push(i.id);
+    }
+  
+    let idForm = {tableauForm, tableauID};
+    console.log(idForm);
+  
+    const methodEnvoi = {
+      method : 'POST',
+      body : JSON.stringify(idForm),
+    } 
+    fetch ("http://localhost:3000/api/products/order", methodEnvoi)
+    .then((res) => res.json())
+    .then (function(tableau){
+      localStorage.setItem("orderId",tableau.orderId);
+      // window.location.href = "confirmation.html?id="+tableau.orderId;
+    })  
+    console.log(tableau.orderId);
     console.log("formulaire envoyé")
-  }
-})
+  // }
+});
+
