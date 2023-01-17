@@ -57,7 +57,7 @@ async function afficherPanier(){
 
 //Code pour supprimer l'article entier du panier
   let deleteProduit = document.querySelectorAll('.deleteItem'); // On cible la class associé au bouton supprimer
-  for( let supr of deleteProduit){
+  for(let supr of deleteProduit){
     supr.addEventListener('click',()=>{       //fonction flecher pour supprimer le produit au click sur le bouton
       let article = supr.closest("article");
       let dataId = article.getAttribute('data-id');
@@ -68,6 +68,7 @@ async function afficherPanier(){
   })
   }
 
+  //Changer la quantité directement au panier
 let addQuantite = document.querySelectorAll('.itemQuantity'); // Cible l'élément ainsi que ca valeur
   for( let add of addQuantite){
     add.addEventListener('click',()=>{
@@ -78,13 +79,13 @@ let addQuantite = document.querySelectorAll('.itemQuantity'); // Cible l'éléme
         if((local.id === dataId) && (local.Couleur === dataCouleur)){
           let newQuantite = parseInt(add.value);
             local.Quantite = newQuantite;
-            break; 
+            break;
         } 
     }
-      localStorage.setItem("panier", JSON.stringify(tableau));
       window.location.reload();
+      localStorage.setItem("panier", JSON.stringify(tableau));
   })
-  }                                        //On veut que quand on ajoute une quantité a un produit deja existant dans le panie                                               // La quantité s'ajoute et le prix se multiplie
+  }
 }
 
 
@@ -95,12 +96,7 @@ let addQuantite = document.querySelectorAll('.itemQuantity'); // Cible l'éléme
 document.querySelector(".cart__order__form").addEventListener('submit', function(e){
 
   e.preventDefault();
-  // S'assurer qu'il y a au moins un produit au panier
-  /* if (tableaupanier.length === 0) {
-    alert("Votre panier est vide");
-    return false;
-  } */
-
+// variable contenant un objet. On met dans les clefs la valeur de l'input
   let contact = {
     firstName: document.querySelector("#firstName").value,
     lastName: document.querySelector("#lastName").value,
@@ -108,7 +104,7 @@ document.querySelector(".cart__order__form").addEventListener('submit', function
     city: document.querySelector("#city").value,
     email: document.querySelector("#email").value,
   };
-
+// variable contenant un objet ciblant la balise <p> pour afficher un message d'erreur sous l'input
   let error = {
     firstName: document.querySelector("#firstNameErrorMsg"),
     lastName: document.querySelector("#lastNameErrorMsg"),
@@ -117,8 +113,9 @@ document.querySelector(".cart__order__form").addEventListener('submit', function
     email: document.querySelector("#emailErrorMsg"),
   };
 
+  //*********** DEBUT DES REGEX **************/
   const regExPrenomNomVille = (value) => {
-    return /^[A-Z][A-Za-z\é\è\ê\ \s-]+$/.test(value);
+    return /^[A-Z][A-Za-z\é\è\ê\-\s]+$/.test(value);
   };
 
   const regExAdresse = (value) => {
@@ -126,15 +123,17 @@ document.querySelector(".cart__order__form").addEventListener('submit', function
   };
 
   const regExEmail = (value) => {
-    return /^[_a-z0-9-]+(.[_a-z0-9-]+)*@[a-z0-9-]+(.[a-z0-9-]+)*(.[a-z]{2,4})$/.test(value);
+    return /^[_a-z0-9-]+(.[_a-z0-9-]+)*@[a-z0-9-]+(.[a-z0-9-]+)*(.[a-z]{2,4})$/.test(
+      value
+    );
   };
 
   // Fonctions de contrôle des champs formulaire:
-  function firstNameControl() {
-    if (regExPrenomNomVille(contact.firstName)) {
+  function firstNameControl() {                             // la fonction dit que si la valeur de l'input first name est vrai,
+    if (regExPrenomNomVille(contact.firstName)) {           // la balise <p> reste vide
       error.firstName.textContent = "";
       return true;
-    } else {
+    } else {                                                // Si la valeur ne correspont pas au regex alors on injecte dans la balise <p> le texte
       error.firstName.textContent =
         "Champ Prénom de formulaire invalide, ex: Paul";
       return false;
@@ -184,7 +183,7 @@ document.querySelector(".cart__order__form").addEventListener('submit', function
     }
   }
 
-  if (
+  if (                                    // Explication du code
     !firstNameControl() ||
     !lastNameControl() ||
     !addressControl() ||
@@ -196,22 +195,22 @@ document.querySelector(".cart__order__form").addEventListener('submit', function
 
 
   // tableau d'id du tableaupanier
-  let products = [];
-  for (const i of tableau) {
-    products.push(i.id);
+  let products = [];              // On creer une variable avec un tableau vide
+  for (const i of tableau) {      // Pour chaque élément du tableau on les nommes i
+    products.push(i.id);          // Si un élément (i) est = a l'id on le pousse (push) dans le tableau vide "products"
   }
-  const idForm = {contact, products};
+  const idForm = {contact, products}; // constante d'objet avec la variable contact (la valeur des inputs) et le tableau avec l'id
 
   const option ={
     method: "POST",
-    body: JSON.stringify(idForm),
+    body: JSON.stringify(idForm),  // Convertir le tableau en chaine de caractere
     headers: {
       "Content-Type": "application/json",
     },
   }
   fetch("http://localhost:3000/api/products/order", option)
     .then((response) => {
-      if (response.status !== 201) {
+      if (response.status !== 201) { // .status ? 
         alert(" erreur server");
       }
       return response.json();
